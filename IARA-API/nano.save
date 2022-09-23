@@ -1,0 +1,2 @@
+sudo docker stop iara-api
+sudo docker rm sudo docker rm 
