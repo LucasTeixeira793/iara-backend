@@ -171,6 +171,16 @@ public class ClienteController {
         return ResponseEntity.status(404).build();
     }
 
+    @GetMapping("/logar/{email}/{senha}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK, retorna os dados do cliente"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+
+    })
+    public ResponseEntity<Optional<Cliente>> getDadosClientePorEmail(@PathVariable String email, @PathVariable String senha){
+        return ResponseEntity.status(200).body(repository.findByEmailAndSenha(email, senha));
+    }
+
     @PutMapping
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Cliente atualizado com sucesso"),
