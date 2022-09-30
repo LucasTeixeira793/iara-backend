@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/agenda")
-@CrossOrigin
+@CrossOrigin()
 public class AgendaController {
 
     @Autowired
