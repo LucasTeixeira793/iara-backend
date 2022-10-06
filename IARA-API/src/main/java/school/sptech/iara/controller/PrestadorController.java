@@ -185,7 +185,7 @@ public class PrestadorController {
                 enderecoRequest.getComplemento(),
                 enderecoRequest.getNumero());
         Optional<Prestador> prestadorOptional = repository.findById(idPrestador);
-        if (!enderecos.isEmpty() && prestadorOptional.isPresent()){
+        if (prestadorOptional.isPresent()){
             Endereco endereco = enderecos.get(0);
             Prestador prestador = prestadorOptional.get();
             prestador.addEndereco(endereco);

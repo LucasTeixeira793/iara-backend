@@ -24,7 +24,7 @@ public abstract class Usuario implements Avaliavel{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @JsonIgnore
+
     @Column(length = 50_000_000)
     private byte[] foto;
 
@@ -61,7 +61,6 @@ public abstract class Usuario implements Avaliavel{
     private boolean autenticado;
 
     @OneToMany
-    @JsonIgnore
     private List<Endereco> enderecos;
 
 

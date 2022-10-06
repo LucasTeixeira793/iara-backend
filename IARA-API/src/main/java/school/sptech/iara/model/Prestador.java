@@ -29,12 +29,10 @@ public class Prestador extends Usuario{
     private Double distancia;
 
     @ManyToMany
-    @JsonIgnore
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
     private List<Habilidade> habilidades;
 
     @OneToMany
-    @JsonIgnore
     private List<Servico> servicos;
 
 //    Constructor
