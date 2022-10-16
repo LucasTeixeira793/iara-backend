@@ -12,6 +12,7 @@ import school.sptech.iara.repository.FotoRepository;
 import school.sptech.iara.repository.PortifolioRepository;
 import school.sptech.iara.repository.PrestadorRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +34,7 @@ public class PortifolioController {
     })
     @GetMapping("/{idPrestador}/{idFoto}")
     public ResponseEntity<Foto> getPortifolio(@PathVariable Integer idPrestador,
-                                                @PathVariable Integer idFoto){
+                                              @PathVariable Integer idFoto){
         Optional<Prestador> prestadorOptional = prestadorRepository.findById(idPrestador);
         if (prestadorOptional.isPresent()){
             Prestador prestador = prestadorOptional.get();
@@ -56,8 +57,8 @@ public class PortifolioController {
             @ApiResponse(responseCode = "204", description = "A busca foi feita, mas não houve retorno de fotos"),
             @ApiResponse(responseCode = "400", description = "Prestador ou portifólio não encontrado")
     })
-    @GetMapping("/{idPrestador}")
-    public ResponseEntity<List<Foto>> getPortifolio(@PathVariable Integer idPrestador){
+    @GetMapping(value = "/{idPrestador}", produces = "image/jpeg")
+    public ResponseEntity<List<byte[]>> getPortifolio(@PathVariable Integer idPrestador){
         Optional<Prestador> prestadorOptional = prestadorRepository.findById(idPrestador);
         if (prestadorOptional.isPresent()){
             Prestador prestador = prestadorOptional.get();
@@ -65,10 +66,14 @@ public class PortifolioController {
             if (portifolioOptional.isPresent()){
                 Portifolio portifolio = portifolioOptional.get();
                 List<Foto> fotos = fotoRepository.findAllByPortifolioOrderByDataAsc(portifolio);
-                if (!fotos.isEmpty()){
-                    return ResponseEntity.status(200).body(fotos);
+                List<byte[]> foto = new ArrayList<>();
+                for (Foto fotoTeste : fotos) {
+                    foto.add(fotoTeste.getFoto());
                 }
-                return ResponseEntity.status(204).body(fotos);
+                if (!fotos.isEmpty()){
+                    return ResponseEntity.status(200).body(foto);
+                }
+                return ResponseEntity.status(204).build();
             }
         }
         return ResponseEntity.status(400).build();

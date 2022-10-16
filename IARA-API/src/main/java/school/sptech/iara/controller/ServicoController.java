@@ -202,4 +202,17 @@ public class ServicoController {
         return ResponseEntity.status(404).build();
     }
 
+    @GetMapping("/prestador/{idPrestador}")
+    public ResponseEntity<List<Servico>> getServico(@PathVariable Integer idPrestador){
+        Optional<Prestador> prestadorOptional = repository.findById(idPrestador);
+        if (prestadorOptional.isPresent()){
+            List<Servico> servicos = servicoRepository.findAllByPrestador_Id(idPrestador);
+            if (!servicos.isEmpty()){
+                return ResponseEntity.status(200).body(servicos);
+            }
+            return ResponseEntity.status(204).body(servicos);
+        }
+        return ResponseEntity.status(400).build();
+    }
+
 }

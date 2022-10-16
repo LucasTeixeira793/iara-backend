@@ -84,13 +84,13 @@ INSERT INTO Avaliacao_Cliente (Avaliacao, Data_Hora, Cliente_Id) VALUES
 
 -- Servicos
 INSERT INTO Servico (Ativo, Descricao, Duracao_Estimada, Tipo, Valor, Prestador_Id) VALUES
-    (true,'Corte Masculino','01:00','Corte',40.00,7),
-    (false,'Pedicure sem Esmaltação','1:20','Podologia',50.00,6),
-    (true,'Luzes','1:30','Corte Feminino',150,7),
-    (true,'Spa dos Pés','00:45','Pedicure',50,6),
-    (true,'Esmaltação','1:00','Manicure',20,6),
-    (true,'Esmaltação Artistica','1:45','Manicure',200,6),
-    (true,'Aparação na barba','00:30','Barba',35,7);
+    (true,'Corte Masculino','01:00','Corte',40.00,1),
+    (false,'Pedicure sem Esmaltação','1:20','Podologia',50.00,1),
+    (true,'Luzes','1:30','Corte Feminino',150,1),
+    (true,'Spa dos Pés','00:45','Pedicure',50,1),
+    (true,'Esmaltação','1:00','Manicure',20,2),
+    (true,'Esmaltação Artistica','1:45','Manicure',200,2),
+    (true,'Aparação na barba','00:30','Barba',35,2);
 
 -- Serviços atribuidos
 INSERT INTO Servico_Atribuido (Cliente_Id, Servico_Id, Avaliacao, Data_Hora_Fim, Status, Observacoes, Finalizado) VALUES
