@@ -82,7 +82,7 @@ public class PrestadorController {
             @ApiResponse(responseCode = "201", description = "Prestador cadastrado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Prestador já existe ou possui dados inválidos")
     })
-    public ResponseEntity<Void> postCadastrarPrestador(@RequestBody Prestador prestador){
+    public ResponseEntity<Prestador> postCadastrarPrestador(@RequestBody Prestador prestador){
         List<Prestador> prestadoresInvalidos = repository.validarCadastro(
                 prestador.getEmail(), prestador.getCpf(), prestador.getTelefone()
         );
@@ -92,7 +92,7 @@ public class PrestadorController {
             Agenda agenda = new Agenda(prestador);
             agendaRepository.save(agenda);
             portifolioRepository.save(new Portifolio(prestador));
-            return ResponseEntity.status(201).build();
+            return ResponseEntity.status(201).body(prestador);
         }
         return ResponseEntity.status(400).build();
     }

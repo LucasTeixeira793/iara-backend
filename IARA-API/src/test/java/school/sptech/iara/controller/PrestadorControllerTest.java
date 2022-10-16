@@ -153,7 +153,7 @@ public class PrestadorControllerTest {
         when(prestadorRepo.validarCadastro(anyString(),anyString(),anyString())).thenReturn(listaMock);
 
         // Act
-        ResponseEntity<Void> resposta = prestadorController.postCadastrarPrestador(prestadorMock);
+        ResponseEntity<Prestador> resposta = prestadorController.postCadastrarPrestador(prestadorMock);
 
         // Assert
         assertTrue(listaMock.isEmpty());
@@ -185,7 +185,7 @@ public class PrestadorControllerTest {
         when(prestadorRepo.validarCadastro(anyString(),anyString(),anyString())).thenReturn(listaMock);
 
         // Act
-        ResponseEntity<Void> resposta = prestadorController.postCadastrarPrestador(prestadorMock);
+        ResponseEntity<Prestador> resposta = prestadorController.postCadastrarPrestador(prestadorMock);
 
         // Assert
         assertFalse(listaMock.isEmpty());
