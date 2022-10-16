@@ -26,7 +26,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/prestador")
-@CrossOrigin
+@CrossOrigin(origins="*", allowedHeaders = "*")
 public class PrestadorController {
 
     @Autowired

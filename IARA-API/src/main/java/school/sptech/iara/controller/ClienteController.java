@@ -28,7 +28,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/cliente")
-@CrossOrigin
+@CrossOrigin(origins="*", allowedHeaders = "*")
 public class ClienteController {
 
     @Autowired
@@ -73,13 +73,13 @@ public class ClienteController {
             @ApiResponse(responseCode = "201", description = "Cliente(s) cadastrado(s) com sucesso"),
             @ApiResponse(responseCode = "400", description = "Cliente já existe ou possui dados inválidos")
     })
-    public ResponseEntity<Void> postCadastroClientes(@RequestBody Cliente cliente){
+    public ResponseEntity<Cliente> postCadastroClientes(@RequestBody Cliente cliente){
         List<Cliente> clienteOptional = repository.validarCadastro(
                 cliente.getEmail(), cliente.getCpf(), cliente.getTelefone()
         );
         if (clienteOptional.isEmpty()){
             repository.save(cliente);
-            return ResponseEntity.status(201).build();
+            return ResponseEntity.status(201).body(cliente);
         }
         return ResponseEntity.status(400).build();
     }

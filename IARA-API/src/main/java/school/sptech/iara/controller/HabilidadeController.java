@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/habilidade")
-@CrossOrigin
+@CrossOrigin(origins="*", allowedHeaders = "*")
 public class HabilidadeController {
 
     @Autowired

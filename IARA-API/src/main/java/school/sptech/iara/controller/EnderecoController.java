@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/endereco")
-@CrossOrigin
+@CrossOrigin(origins="*", allowedHeaders = "*")
 public class EnderecoController {
 
     @Autowired
