@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/portifolio")
-@CrossOrigin
+@CrossOrigin(origin="*")
 public class PortifolioController {
     @Autowired
     private PortifolioRepository portifolioRepository;

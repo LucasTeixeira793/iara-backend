@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/servico-atribuido")
-@CrossOrigin
+@CrossOrigin(origin="*")
 public class ServicoAtribuidoController {
 
     @Autowired
