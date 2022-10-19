@@ -57,7 +57,7 @@ public class PortifolioController {
             @ApiResponse(responseCode = "204", description = "A busca foi feita, mas não houve retorno de fotos"),
             @ApiResponse(responseCode = "400", description = "Prestador ou portifólio não encontrado")
     })
-    @GetMapping(value = "/{idPrestador}", produces = "image/jpeg")
+    @GetMapping("/{idPrestador}")
     public ResponseEntity<List<byte[]>> getPortifolio(@PathVariable Integer idPrestador){
         Optional<Prestador> prestadorOptional = prestadorRepository.findById(idPrestador);
         if (prestadorOptional.isPresent()){

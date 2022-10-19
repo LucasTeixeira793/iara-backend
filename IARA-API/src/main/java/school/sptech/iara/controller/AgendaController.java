@@ -47,6 +47,13 @@ public class AgendaController {
         if (agendaOptional.isPresent()){
             Agenda agenda = agendaOptional.get();
             List<Agendamento> agendamentos = agendamentoRepository.findAllByAgendaOrderByDataAscHoraInicioAsc(agenda);
+            List<Agendamento> agendamentosValidos = new ArrayList<>();
+            for (Agendamento a : agendamentos) {
+                if (Objects.nonNull(a.getServicoAtribuido())) {
+                    agendamentosValidos.add(a);
+                    return ResponseEntity.status(200).body(agendamentosValidos);
+                }
+            }
             if (!agendamentos.isEmpty()){
                 return ResponseEntity.status(200).body(agendamentos);
             }
