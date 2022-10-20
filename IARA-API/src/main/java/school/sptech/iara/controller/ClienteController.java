@@ -14,6 +14,7 @@ import school.sptech.iara.repository.EnderecoRepository;
 import school.sptech.iara.request.*;
 import school.sptech.iara.response.UsuarioAvaliacaoResponse;
 import school.sptech.iara.util.GravaArquivo;
+import school.sptech.iara.util.HashTable;
 
 import javax.validation.Valid;
 import java.io.BufferedReader;
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -65,6 +67,33 @@ public class ClienteController {
             return ResponseEntity.status(200).body(cliente);
         }
         return ResponseEntity.status(404).build();
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Retorna cliente com o CPF procurado"),
+            @ApiResponse(responseCode = "404", description = "cliente com CPF não encontrado")
+    })
+    @GetMapping("/cpf/{cpf}")
+    public ResponseEntity<Cliente> getClientePorCpf(@PathVariable String cpf){
+        ResponseEntity<List<Cliente>> todosClientesRes = this.getCliente();
+        if (todosClientesRes.getStatusCodeValue() == 200){
+            List<Cliente> todosClientes = todosClientesRes.getBody();
+            HashTable ht = new HashTable();
+
+            // Insere clientes na hash
+            if (Objects.nonNull(todosClientes) ){
+                for (Cliente c:todosClientes) {
+                    ht.insere(c);
+                }
+            }
+            // Busca na Hash
+            Cliente cliente = ht.busca(cpf);
+            if (Objects.nonNull(cliente)){
+                return ResponseEntity.status(200).body(cliente);
+            }
+
+        }
+        return ResponseEntity.status(204).build();
     }
 
     //cadastro de clientes, com possibilidade de cadastrar vários de uma só vez
