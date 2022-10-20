@@ -29,7 +29,7 @@ public class Prestador extends Usuario{
     private Double distancia;
 
     @ManyToMany
-    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
+    //@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
     private List<Habilidade> habilidades;
 
     @OneToMany
