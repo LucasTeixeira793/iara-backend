@@ -54,9 +54,6 @@ public class AgendaController {
                     return ResponseEntity.status(200).body(agendamentosValidos);
                 }
             }
-            if (!agendamentos.isEmpty()){
-                return ResponseEntity.status(200).body(agendamentos);
-            }
             return ResponseEntity.status(204).build();
         }
         return ResponseEntity.status(404).build();
