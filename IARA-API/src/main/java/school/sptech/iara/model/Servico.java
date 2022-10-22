@@ -39,7 +39,7 @@ public class Servico {
         this.descricao = descricao;
         this.tipo = tipo;
         ativo = true;
-        this.prestador = prestador;
+//        this.prestador = prestador;
         this.duracaoEstimada = duracaoEstimada;
 //        servicoAtribuidos = new ArrayList<>();
     }
