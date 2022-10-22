@@ -34,6 +34,8 @@ public class ServicoAtribuidoController {
     private AgendamentoRepository agendamentoRepository;
     @Autowired
     private AgendaRepository agendaRepository;
+    @Autowired
+    private PrestadorRepository prestadorRepository;
 
     @GetMapping
     @ApiResponses(value = {
@@ -64,7 +66,8 @@ public class ServicoAtribuidoController {
             Servico servico = servicoOptional.get();
             Cliente cliente = clienteOptional.get();
             ServicoAtribuido servicoAtribuido;
-            Prestador prestador = servico.getPrestador();
+            Prestador prestador = prestadorRepository.findByServicosContains(servico);
+//            Prestador prestador = servico.getPrestador();
             Optional<Agenda> agendaOptional = agendaRepository.findByPrestador_Id(prestador.getId());
             if (agendaOptional.isPresent()){
                 Agenda agenda = agendaOptional.get();

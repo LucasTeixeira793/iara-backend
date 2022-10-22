@@ -32,6 +32,8 @@ public class ServicoController {
     @Autowired
     private ServicoAtribuidoRepository servicoAtribuidoRepository;
     @Autowired
+    private PrestadorRepository prestadorRepository;
+    @Autowired
     private PrestadorRepository repository;
 
     @GetMapping
@@ -46,7 +48,7 @@ public class ServicoController {
             for (Servico servico : servicos){
                 ServicoResponse servicoResponse = new ServicoResponse(servico.getId(),
                         servico.getValor(), servico.getDescricao(),servico.getTipo(),servico.getDuracaoEstimada(),
-                        servico.getPrestador().getId(),servico.getAvaliacao(),servico.getQtdServicosAvaliados());
+                        prestadorRepository.findByServicosContains(servico).getId(),servico.getAvaliacao(),servico.getQtdServicosAvaliados());
                 resp.add(servicoResponse);
             }
             return ResponseEntity.status(200).body(resp);
@@ -65,40 +67,40 @@ public class ServicoController {
             Servico servico = servicoOptional.get();
             ServicoResponse servicoResponse = new ServicoResponse(servico.getId(),
                     servico.getValor(), servico.getDescricao(),servico.getTipo(),servico.getDuracaoEstimada(),
-                    servico.getPrestador().getId(),servico.getAvaliacao(),servico.getQtdServicosAvaliados());
+                    prestadorRepository.findByServicosContains(servico).getId(),servico.getAvaliacao(),servico.getQtdServicosAvaliados());
             return ResponseEntity.status(200).body(servicoResponse);
         }
         return ResponseEntity.status(404).build();
     }
 
-    @GetMapping("/avaliacao/{idServico}")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Retorna a média de avaliações de todos os serviços atribuidos deste serviço"),
-            @ApiResponse(responseCode = "204", description = "Este serviço não tem avaliações"),
-            @ApiResponse(responseCode = "400", description = "Serviço inexistente")
-    })
-    public ResponseEntity<ServicoAvaliacaoResponse> getAvaliacao(@PathVariable Integer idServico){
-        Optional<Servico> servicoOptional = servicoRepository.findById(idServico);
-        if (servicoOptional.isPresent()){
-            Servico servico = servicoOptional.get();
-            List<ServicoAtribuido> servicoAtribuidos = servicoAtribuidoRepository.findAllByServicoAndStatus(servico, "Finalizado");
-            Double soma = 0d;
-            Double media = 0d;
-            Integer contagem = 0;
-            for (ServicoAtribuido serv: servicoAtribuidos) {
-                if(serv.getAvaliacao() >= 0 && serv.getAvaliacao() <= 5){
-                    soma += serv.getAvaliacao();
-                    contagem++;
-                }
-            }
-            if (!servicoAtribuidos.isEmpty()){
-                media = soma / contagem;
-                return ResponseEntity.status(200).body(new ServicoAvaliacaoResponse(servico.getId(), media));
-            }
-            return ResponseEntity.status(204).build();
-        }
-        return ResponseEntity.status(400).build();
-    }
+//    @GetMapping("/avaliacao/{idServico}")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Retorna a média de avaliações de todos os serviços atribuidos deste serviço"),
+//            @ApiResponse(responseCode = "204", description = "Este serviço não tem avaliações"),
+//            @ApiResponse(responseCode = "400", description = "Serviço inexistente")
+//    })
+//    public ResponseEntity<ServicoAvaliacaoResponse> getAvaliacao(@PathVariable Integer idServico){
+//        Optional<Servico> servicoOptional = servicoRepository.findById(idServico);
+//        if (servicoOptional.isPresent()){
+//            Servico servico = servicoOptional.get();
+//            List<ServicoAtribuido> servicoAtribuidos = servicoAtribuidoRepository.findAllByServicoAndStatus(servico, "Finalizado");
+//            Double soma = 0d;
+//            Double media = 0d;
+//            Integer contagem = 0;
+//            for (ServicoAtribuido serv: servicoAtribuidos) {
+//                if(serv.getAvaliacao() >= 0 && serv.getAvaliacao() <= 5){
+//                    soma += serv.getAvaliacao();
+//                    contagem++;
+//                }
+//            }
+//            if (!servicoAtribuidos.isEmpty()){
+//                media = soma / contagem;
+//                return ResponseEntity.status(200).body(new ServicoAvaliacaoResponse(servico.getId(), media));
+//            }
+//            return ResponseEntity.status(204).build();
+//        }
+//        return ResponseEntity.status(400).build();
+//    }
 
 
 //    adiciona serviço
@@ -206,7 +208,8 @@ public class ServicoController {
     public ResponseEntity<List<Servico>> getServico(@PathVariable Integer idPrestador){
         Optional<Prestador> prestadorOptional = repository.findById(idPrestador);
         if (prestadorOptional.isPresent()){
-            List<Servico> servicos = servicoRepository.findAllByPrestador_Id(idPrestador);
+            Prestador prestador = prestadorOptional.get();
+            List<Servico> servicos = prestadorRepository.buscaServicosPorPrestador(prestador.getId());
             if (!servicos.isEmpty()){
                 return ResponseEntity.status(200).body(servicos);
             }

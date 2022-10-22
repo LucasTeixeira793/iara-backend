@@ -2,6 +2,7 @@ package school.sptech.iara.repository;
 
 import com.github.javafaker.Bool;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import school.sptech.iara.model.Prestador;
 import school.sptech.iara.model.Servico;
 import school.sptech.iara.model.ServicoAtribuido;
@@ -13,6 +14,6 @@ public interface ServicoAtribuidoRepository extends JpaRepository<ServicoAtribui
 //            (Boolean fin, Boolean ativ, Prestador prestador);
 
     List<ServicoAtribuido> findAllByServicoAndStatus(Servico servico, String status);
-    List<ServicoAtribuido> findAllByServico_PrestadorAndStatus(Prestador prestador, String status);
+//    List<ServicoAtribuido> findAllByServico_PrestadorAndStatus(Integer idPrestador, String status);
 
 }

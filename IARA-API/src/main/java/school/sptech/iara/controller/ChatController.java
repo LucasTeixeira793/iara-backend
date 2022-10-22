@@ -48,27 +48,27 @@ public class ChatController {
         return ResponseEntity.status(400).build();
     }
 
-    @PostMapping("/mensagem")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Mensagem criada com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Chat não encontrado")
-    })
-    public ResponseEntity<Void> postMensagem(@RequestBody MensagemRequest req){
-        Optional<Chat> chatOptional = chatRepository.findById(req.getIdChat());
-        if (chatOptional.isPresent()){
-            Chat chat = chatOptional.get();
-            ServicoAtribuido servicoAtribuido = servicoAtribuidoRepository.findById(chat.getServicoAtribuido().getId()).get();
-            Servico servico = servicoRepository.findById(servicoAtribuido.getServico().getId()).get();
-            Prestador prestador = prestadorRepository.findByServicosContains(servico);
-            Mensagem msg = new Mensagem(prestador,
-                    servicoAtribuido.getCliente(),
-                    req.getMensagem(),
-                    chat,
-                    req.getEnviadoPeloPrestador());
-            mensagemRepository.save(msg);
-            return ResponseEntity.status(201).build();
-        }
-        return ResponseEntity.status(400).build();
-    }
+//    @PostMapping("/mensagem")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "201", description = "Mensagem criada com sucesso"),
+//            @ApiResponse(responseCode = "400", description = "Chat não encontrado")
+//    })
+//    public ResponseEntity<Void> postMensagem(@RequestBody MensagemRequest req){
+//        Optional<Chat> chatOptional = chatRepository.findById(req.getIdChat());
+//        if (chatOptional.isPresent()){
+//            Chat chat = chatOptional.get();
+//            ServicoAtribuido servicoAtribuido = servicoAtribuidoRepository.findById(chat.getServicoAtribuido().getId()).get();
+//            Servico servico = servicoRepository.findById(servicoAtribuido.getServico().getId()).get();
+//            Prestador prestador = prestadorRepository.findByServicosContains(servico);
+//            Mensagem msg = new Mensagem(prestador,
+//                    servicoAtribuido.getCliente(),
+//                    req.getMensagem(),
+//                    chat,
+//                    req.getEnviadoPeloPrestador());
+//            mensagemRepository.save(msg);
+//            return ResponseEntity.status(201).build();
+//        }
+//        return ResponseEntity.status(400).build();
+//    }
 
 }

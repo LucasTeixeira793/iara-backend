@@ -29,8 +29,8 @@ public class AgendaController {
     private AgendaRepository agendaRepository;
     @Autowired
     private AgendamentoRepository agendamentoRepository;
-    @Autowired
-    private ServicoAtribuidoRepository servicoAtribuidoRepository;
+//    @Autowired
+//    private ServicoAtribuidoRepository servicoAtribuidoRepository;
     @Autowired
     private ServicoRepository servicoRepository;
     @Autowired
@@ -95,7 +95,7 @@ public class AgendaController {
                 Prestador prestador = prestadorOptional.get();
                 Servico servico = servicoOptional.get();
                 Optional<Agenda> agendaOptional = agendaRepository.findByPrestador_Id(prestador.getId());
-                if (servico.getPrestador().equals(prestador) && agendaOptional.isPresent()){
+                if (prestadorRepository.findByServicosContains(servico).equals(prestador) && agendaOptional.isPresent()){
                     Agenda agenda = agendaOptional.get();
                     List<Agendamento> agendamentos = agendamentoRepository.findAllByAgendaAndDataOrderByHoraInicio
                                                                             (agenda, req.getData());
@@ -289,36 +289,36 @@ public class AgendaController {
         return ResponseEntity.status(400).build();
     }
 
-    @DeleteMapping
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "202", description = "Agendamento excluido com sucesso"),
-            @ApiResponse(responseCode = "204", description = "Nenhum registro encontrado para a exclusão"),
-            @ApiResponse(responseCode = "400", description = "prestador inxistente")
-    })
-    public ResponseEntity<Void> deleteAgendamento(@RequestBody AgendamentoDataHoraRequest req){
-        Optional<Agenda> agendaOptional = agendaRepository.findByPrestador_Id(req.getIdPrestador());
-        if (agendaOptional.isPresent()){
-            Agenda agenda = agendaOptional.get();
-            List<Agendamento> agendamentos = agendamentoRepository.findAllByAgendaAndDataAndHoraInicioAndHoraFim
-                    (agenda, req.getData(), req.getHoraInicio(), req.getHoraFim());
-            if (!agendamentos.isEmpty()){
-                for (Agendamento ag: agendamentos) {
-                    if (!Objects.isNull(ag.getServicoAtribuido())){
-                        ServicoAtribuido servicoAtribuido = ag.getServicoAtribuido();
-                        if (!servicoAtribuido.isFinalizado()){
-                            servicoAtribuido.setStatus("Cancelado");
-                            servicoAtribuido.finalizarServico();
-                            servicoAtribuidoRepository.save(servicoAtribuido);
-                        }
-                    }
-                    agendamentoRepository.delete(ag);
-                }
-                return ResponseEntity.status(202).build();
-            }
-            return ResponseEntity.status(204).build();
-        }
-        return ResponseEntity.status(400).build();
-    }
+//    @DeleteMapping
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "202", description = "Agendamento excluido com sucesso"),
+//            @ApiResponse(responseCode = "204", description = "Nenhum registro encontrado para a exclusão"),
+//            @ApiResponse(responseCode = "400", description = "prestador inxistente")
+//    })
+//    public ResponseEntity<Void> deleteAgendamento(@RequestBody AgendamentoDataHoraRequest req){
+//        Optional<Agenda> agendaOptional = agendaRepository.findByPrestador_Id(req.getIdPrestador());
+//        if (agendaOptional.isPresent()){
+//            Agenda agenda = agendaOptional.get();
+//            List<Agendamento> agendamentos = agendamentoRepository.findAllByAgendaAndDataAndHoraInicioAndHoraFim
+//                    (agenda, req.getData(), req.getHoraInicio(), req.getHoraFim());
+//            if (!agendamentos.isEmpty()){
+//                for (Agendamento ag: agendamentos) {
+//                    if (!Objects.isNull(ag.getServicoAtribuido())){
+//                        ServicoAtribuido servicoAtribuido = ag.getServicoAtribuido();
+//                        if (!servicoAtribuido.isFinalizado()){
+//                            servicoAtribuido.setStatus("Cancelado");
+//                            servicoAtribuido.finalizarServico();
+//                            servicoAtribuidoRepository.save(servicoAtribuido);
+//                        }
+//                    }
+//                    agendamentoRepository.delete(ag);
+//                }
+//                return ResponseEntity.status(202).build();
+//            }
+//            return ResponseEntity.status(204).build();
+//        }
+//        return ResponseEntity.status(400).build();
+//    }
 
 
 

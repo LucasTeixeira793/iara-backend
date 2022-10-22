@@ -31,4 +31,7 @@ public interface PrestadorRepository extends JpaRepository<Prestador, Integer> {
     Prestador findByServicosContains(Servico servico);
 
     List<Prestador> findAllByHabilidades_Categoria(Categoria categoria);
+
+    @Query("SELECT a.servicos FROM Prestador a WHERE a.id = ?1")
+    List<Servico> buscaServicosPorPrestador(Integer idPrestador);
 }
