@@ -59,7 +59,7 @@ public class ServicoAtribuidoController {
             @ApiResponse(responseCode = "204", description = "Retorna uma lista vazia"),
             @ApiResponse(responseCode = "204", description = "Cliente não encontrado")
     })
-    public ResponseEntity<List<ServicoAtribuido>> getServicoAttribPorCliente(Integer idCliente){
+    public ResponseEntity<List<ServicoAtribuido>> getServicoAttribPorCliente(@PathVariable Integer idCliente){
         Optional<Cliente> clienteOptional = clienteRepository.findById(idCliente);
         if (clienteOptional.isPresent()){
             Cliente cliente = clienteOptional.get();
@@ -78,7 +78,7 @@ public class ServicoAtribuidoController {
             @ApiResponse(responseCode = "204", description = "Retorna uma lista vazia"),
             @ApiResponse(responseCode = "204", description = "Cliente não encontrado")
     })
-    public ResponseEntity<List<ServicoAtribuido>> getServicoAttribPorClienteAtivos(Integer idCliente){
+    public ResponseEntity<List<ServicoAtribuido>> getServicoAttribPorClienteAtivos(@PathVariable Integer idCliente){
         Optional<Cliente> clienteOptional = clienteRepository.findById(idCliente);
         if (clienteOptional.isPresent()){
             Cliente cliente = clienteOptional.get();
