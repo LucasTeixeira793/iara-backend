@@ -56,7 +56,7 @@ public class EnderecoController {
             @ApiResponse(responseCode = "201", description = "Endereço criado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Endereço já existe")
     })
-    public ResponseEntity<Void> postEnderecoReq(@RequestBody EnderecoSimplesRequest enderecoRequest){
+    public ResponseEntity<Endereco> postEnderecoReq(@RequestBody EnderecoSimplesRequest enderecoRequest){
         List<Endereco> enderecos = enderecoRepository.enderecoValido(enderecoRequest.getCep(),
                 enderecoRequest.getComplemento(),
                 enderecoRequest.getNumero());
@@ -74,7 +74,7 @@ public class EnderecoController {
                     viacepResponse.getUf(),
                     complemento);
             enderecoRepository.save(endereco);
-            return ResponseEntity.status(201).build();
+            return ResponseEntity.status(201).body(endereco);
         }
         return ResponseEntity.status(400).build();
     }

@@ -19,6 +19,7 @@ public class ServicoAtribuido implements Avaliavel{
     private int id;
     @ManyToOne
     private Cliente cliente;
+    private LocalDateTime dataHoraInicio;
     private LocalDateTime dataHoraFim;
     private String observacoes;
     private String status;
@@ -31,22 +32,26 @@ public class ServicoAtribuido implements Avaliavel{
 
 //    Constructor
     public ServicoAtribuido(Servico servico,
-                            Cliente cliente) {
+                            Cliente cliente,
+                            LocalDateTime dataHoraInicio) {
         this.cliente = cliente;
         this.status = "Agendado";
         this.finalizado = false;
         this.avaliacao = -1.0;
         this.servico = servico;
+        this.dataHoraInicio = dataHoraInicio;
 //        this.chat = chat;
     }
     public ServicoAtribuido(Servico servico,
                             Cliente cliente,
+                            LocalDateTime dataHoraInicio,
                             String observacoes) {
         this.cliente = cliente;
         this.observacoes = observacoes;
         this.status = "Agendado";
         this.finalizado = false;
         this.avaliacao = -1.0;
+        this.dataHoraInicio = dataHoraInicio;
         this.servico = servico;
 //        this.chat = chat;
     }

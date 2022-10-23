@@ -42,6 +42,8 @@ public class PrestadorController {
     @Autowired
     private EnderecoRepository enderecoRepository;
     @Autowired
+    private EnderecoController enderecoController;
+    @Autowired
     private PortifolioRepository portifolioRepository;
     @Autowired
     private ServicoController servicoController;
@@ -186,12 +188,26 @@ public class PrestadorController {
                 enderecoRequest.getNumero());
         Optional<Prestador> prestadorOptional = repository.findById(idPrestador);
         if (prestadorOptional.isPresent()){
-            Endereco endereco = enderecos.get(0);
             Prestador prestador = prestadorOptional.get();
-            prestador.addEndereco(endereco);
-            repository.save(prestador);
-            return ResponseEntity.status(200).build();
+            if (enderecos.isEmpty()){
+                ResponseEntity<Endereco> enderecoResponseEntity = enderecoController.postEnderecoReq(enderecoRequest);
+                Endereco endereco = enderecoResponseEntity.getBody();
+                if (!repository.existsByEnderecosContainsAndId(endereco, prestador.getId())){
+                    enderecoRepository.save(endereco);
+                    prestador.addEndereco(endereco);
+                    repository.save(prestador);
+                    return ResponseEntity.status(200).build();
+                }
+            }else{
+                Endereco endereco = enderecos.get(0);
+                if (!repository.existsByEnderecosContainsAndId(endereco, prestador.getId())){
+                    prestador.addEndereco(endereco);
+                    repository.save(prestador);
+                    return ResponseEntity.status(200).build();
+                }
+            }
         }
+
         return ResponseEntity.status(400).build();
     }
 

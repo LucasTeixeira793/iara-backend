@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import school.sptech.iara.model.Cliente;
+import school.sptech.iara.model.Endereco;
 
 
 import java.util.List;
@@ -27,4 +28,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
     byte[] getFoto(Integer idCliente);
 
     Boolean existsByTelefone(String telefone);
+
+    Boolean existsByEnderecosContainsAndId(Endereco endereco,Integer idPrestador);
 }

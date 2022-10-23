@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import school.sptech.iara.model.AvaliacaoCliente;
 import school.sptech.iara.model.Cliente;
 import school.sptech.iara.model.Endereco;
+import school.sptech.iara.model.Prestador;
 import school.sptech.iara.repository.AvaliacaoRepository;
 import school.sptech.iara.repository.ClienteRepository;
 import school.sptech.iara.repository.EnderecoRepository;
@@ -39,6 +40,8 @@ public class ClienteController {
     private AvaliacaoRepository avaliacaoRepository;
     @Autowired
     private EnderecoRepository enderecoRepository;
+    @Autowired
+    private EnderecoController enderecoController;
 
     // retorna todos registros de usuários
     @GetMapping
@@ -250,13 +253,28 @@ public class ClienteController {
                 enderecoRequest.getComplemento(),
                 enderecoRequest.getNumero());
         Optional<Cliente> clienteOptional = repository.findById(idCliente);
-        if (!enderecos.isEmpty() && clienteOptional.isPresent()){
-            Endereco endereco = enderecos.get(0);
+        if (clienteOptional.isPresent()){
             Cliente cliente = clienteOptional.get();
-            cliente.addEndereco(endereco);
-            repository.save(cliente);
-            return ResponseEntity.status(200).build();
+            if (enderecos.isEmpty()){
+                ResponseEntity<Endereco> enderecoResponseEntity = enderecoController.postEnderecoReq(enderecoRequest);
+                Endereco endereco = enderecoResponseEntity.getBody();
+                if (!repository.existsByEnderecosContainsAndId(endereco, cliente.getId())){
+                    enderecoRepository.save(endereco);
+                    cliente.addEndereco(endereco);
+                    repository.save(cliente);
+                    return ResponseEntity.status(200).build();
+                }
+            }else{
+                Endereco endereco = enderecos.get(0);
+                if (!repository.existsByEnderecosContainsAndId(endereco, cliente.getId())){
+                    enderecoRepository.save(endereco);
+                    cliente.addEndereco(endereco);
+                    repository.save(cliente);
+                    return ResponseEntity.status(200).build();
+                }
+            }
         }
+
         return ResponseEntity.status(400).build();
     }
 

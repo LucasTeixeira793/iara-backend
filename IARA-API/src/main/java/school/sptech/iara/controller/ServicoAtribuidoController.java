@@ -136,11 +136,13 @@ public class ServicoAtribuidoController {
                     if (req.getObservacoes().isBlank()) {
                         servicoAtribuido = new ServicoAtribuido(
                                 servico,
-                                cliente);
+                                cliente,
+                                req.getDataInicio());
                     } else {
                         servicoAtribuido = new ServicoAtribuido(
                                 servico,
                                 cliente,
+                                req.getDataInicio(),
                                 req.getObservacoes());
                     }
                     Chat chat = new Chat(servicoAtribuido);

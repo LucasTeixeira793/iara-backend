@@ -31,4 +31,5 @@ public interface PrestadorRepository extends JpaRepository<Prestador, Integer> {
     Prestador findByServicosContains(Servico servico);
 
     List<Prestador> findAllByHabilidades_Categoria(Categoria categoria);
+    Boolean existsByEnderecosContainsAndId(Endereco endereco, Integer idPrestador);
 }
