@@ -83,7 +83,7 @@ INSERT INTO Avaliacao_Cliente (Avaliacao, Data_Hora, Cliente_Id) VALUES
 --     ('Pedicure','Spa dos Pés');
 
 -- Servicos
-INSERT INTO Servico (Ativo, Descricao, Duracao_Estimada, Tipo, Valor, Prestador_Id) VALUES
+INSERT INTO Servico (Ativo, Descricao, Duracao_Estimada, Tipo, Valor, Prestador) VALUES
     (true,'Corte Masculino','01:00','Corte',40.00,1),
     (false,'Pedicure sem Esmaltação','1:20','Podologia',50.00,1),
     (true,'Luzes','1:30','Corte Feminino',150,1),

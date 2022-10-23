@@ -34,6 +34,8 @@ public class ServicoAtribuidoController {
     private AgendamentoRepository agendamentoRepository;
     @Autowired
     private AgendaRepository agendaRepository;
+    @Autowired
+    private PrestadorRepository prestadorRepository;
 
     @GetMapping
     @ApiResponses(value = {
@@ -64,50 +66,54 @@ public class ServicoAtribuidoController {
             Servico servico = servicoOptional.get();
             Cliente cliente = clienteOptional.get();
             ServicoAtribuido servicoAtribuido;
-            Prestador prestador = servico.getPrestador();
-            Optional<Agenda> agendaOptional = agendaRepository.findByPrestador_Id(prestador.getId());
-            if (agendaOptional.isPresent()){
-                Agenda agenda = agendaOptional.get();
-                Agendamento agendamento = new Agendamento(servico.getTipo() +" - "+ servico.getDescricao(),req.getObservacoes(), req.getDataInicio().toLocalDate(),
-                        req.getDataInicio().toLocalTime(), req.getDataInicio().toLocalTime().plusHours(servico.getDuracaoEstimada().getHour())
-                        .plusMinutes(servico.getDuracaoEstimada().getMinute()), agenda);
+            Optional<Prestador> prestadorOptional = prestadorRepository.findById(servico.getPrestador());
+            if (prestadorOptional.isPresent()){
+                Prestador prestador = prestadorOptional.get();
+                Optional<Agenda> agendaOptional = agendaRepository.findByPrestador_Id(prestador.getId());
+                if (agendaOptional.isPresent()){
+                    Agenda agenda = agendaOptional.get();
+                    Agendamento agendamento = new Agendamento(servico.getTipo() +" - "+ servico.getDescricao(),req.getObservacoes(), req.getDataInicio().toLocalDate(),
+                            req.getDataInicio().toLocalTime(), req.getDataInicio().toLocalTime().plusHours(servico.getDuracaoEstimada().getHour())
+                            .plusMinutes(servico.getDuracaoEstimada().getMinute()), agenda);
 
-                if (agendamento.getHoraFim().isBefore(agendamento.getHoraInicio()) ||
-                    agendamento.getData().isBefore(LocalDate.now()) ||
-                    agendamento.getData().equals(LocalDate.now()) && agendamento.getHoraInicio().isBefore(LocalTime.now())){
+                    if (agendamento.getHoraFim().isBefore(agendamento.getHoraInicio()) ||
+                            agendamento.getData().isBefore(LocalDate.now()) ||
+                            agendamento.getData().equals(LocalDate.now()) && agendamento.getHoraInicio().isBefore(LocalTime.now())){
 
-                    return ResponseEntity.status(400).build();
-                }
-                List<Agendamento> agendamentos = agendamentoRepository.findAllByAgendaAndData(agenda,req.getDataInicio().toLocalDate());
-                if (agendamentos.isEmpty())
-                    return ResponseEntity.status(400).build();
-                for (Agendamento ag:agendamentos) {
-                    if (agendamento.getHoraInicio().isAfter(ag.getHoraInicio()) && agendamento.getHoraInicio().isBefore(ag.getHoraFim()) ||
-                        agendamento.getHoraFim().isAfter(ag.getHoraInicio()) && agendamento.getHoraFim().isBefore(ag.getHoraFim()) ||
-                        agendamento.getHoraInicio().equals(ag.getHoraInicio()) && agendamento.getHoraFim().equals(ag.getHoraFim())
-                        ){
                         return ResponseEntity.status(400).build();
                     }
-                }
+                    List<Agendamento> agendamentos = agendamentoRepository.findAllByAgendaAndData(agenda,req.getDataInicio().toLocalDate());
+                    if (agendamentos.isEmpty())
+                        return ResponseEntity.status(400).build();
+                    for (Agendamento ag:agendamentos) {
+                        if (agendamento.getHoraInicio().isAfter(ag.getHoraInicio()) && agendamento.getHoraInicio().isBefore(ag.getHoraFim()) ||
+                                agendamento.getHoraFim().isAfter(ag.getHoraInicio()) && agendamento.getHoraFim().isBefore(ag.getHoraFim()) ||
+                                agendamento.getHoraInicio().equals(ag.getHoraInicio()) && agendamento.getHoraFim().equals(ag.getHoraFim())
+                        ){
+                            return ResponseEntity.status(400).build();
+                        }
+                    }
 
 
-                if (req.getObservacoes().isBlank()) {
-                    servicoAtribuido = new ServicoAtribuido(
-                            servico,
-                            cliente);
-                } else {
-                    servicoAtribuido = new ServicoAtribuido(
-                            servico,
-                            cliente,
-                            req.getObservacoes());
+                    if (req.getObservacoes().isBlank()) {
+                        servicoAtribuido = new ServicoAtribuido(
+                                servico,
+                                cliente);
+                    } else {
+                        servicoAtribuido = new ServicoAtribuido(
+                                servico,
+                                cliente,
+                                req.getObservacoes());
+                    }
+                    Chat chat = new Chat(servicoAtribuido);
+                    servicoAtribuidoRepository.save(servicoAtribuido);
+                    chatRepository.save(chat);
+                    agendamento.setServicoAtribuido(servicoAtribuido);
+                    agendamentoRepository.save(agendamento);
+                    return ResponseEntity.status(201).build();
                 }
-                Chat chat = new Chat(servicoAtribuido);
-                servicoAtribuidoRepository.save(servicoAtribuido);
-                chatRepository.save(chat);
-                agendamento.setServicoAtribuido(servicoAtribuido);
-                agendamentoRepository.save(agendamento);
-                return ResponseEntity.status(201).build();
             }
+
 
         }
         return ResponseEntity.status(400).build();

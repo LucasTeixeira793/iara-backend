@@ -30,8 +30,8 @@ public class Servico {
 //    @OneToMany
 //    private List<ServicoAtribuido> servicoAtribuidos;
 
-    @ManyToOne
-    private Prestador prestador;
+
+    private Integer prestador;
 
 //    Constructor
     public Servico(double valor, String descricao, String tipo, LocalTime duracaoEstimada, Prestador prestador) {
@@ -39,7 +39,7 @@ public class Servico {
         this.descricao = descricao;
         this.tipo = tipo;
         ativo = true;
-        this.prestador = prestador;
+        this.prestador = prestador.getId();
         this.duracaoEstimada = duracaoEstimada;
 //        servicoAtribuidos = new ArrayList<>();
     }

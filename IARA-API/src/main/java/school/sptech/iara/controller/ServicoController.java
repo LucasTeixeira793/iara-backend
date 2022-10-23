@@ -46,7 +46,7 @@ public class ServicoController {
             for (Servico servico : servicos){
                 ServicoResponse servicoResponse = new ServicoResponse(servico.getId(),
                         servico.getValor(), servico.getDescricao(),servico.getTipo(),servico.getDuracaoEstimada(),
-                        servico.getPrestador().getId(),servico.getAvaliacao(),servico.getQtdServicosAvaliados());
+                        servico.getPrestador(),servico.getAvaliacao(),servico.getQtdServicosAvaliados());
                 resp.add(servicoResponse);
             }
             return ResponseEntity.status(200).body(resp);
@@ -65,7 +65,7 @@ public class ServicoController {
             Servico servico = servicoOptional.get();
             ServicoResponse servicoResponse = new ServicoResponse(servico.getId(),
                     servico.getValor(), servico.getDescricao(),servico.getTipo(),servico.getDuracaoEstimada(),
-                    servico.getPrestador().getId(),servico.getAvaliacao(),servico.getQtdServicosAvaliados());
+                    servico.getPrestador(),servico.getAvaliacao(),servico.getQtdServicosAvaliados());
             return ResponseEntity.status(200).body(servicoResponse);
         }
         return ResponseEntity.status(404).build();
@@ -206,7 +206,7 @@ public class ServicoController {
     public ResponseEntity<List<Servico>> getServico(@PathVariable Integer idPrestador){
         Optional<Prestador> prestadorOptional = repository.findById(idPrestador);
         if (prestadorOptional.isPresent()){
-            List<Servico> servicos = servicoRepository.findAllByPrestador_Id(idPrestador);
+            List<Servico> servicos = servicoRepository.buscaServicosPorPrestador(idPrestador);
             if (!servicos.isEmpty()){
                 return ResponseEntity.status(200).body(servicos);
             }
