@@ -18,7 +18,6 @@ public class ServicoAtribuido implements Avaliavel{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne
-
     private Cliente cliente;
     private LocalDateTime dataHoraFim;
     private String observacoes;

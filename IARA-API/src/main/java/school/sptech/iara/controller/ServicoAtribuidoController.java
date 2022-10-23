@@ -53,6 +53,44 @@ public class ServicoAtribuidoController {
         return ResponseEntity.status(200).body(servicoAtribuidoResponses);
     }
 
+    @GetMapping("/cliente/{idCliente}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Retorna uma lista de serviços atribuídos"),
+            @ApiResponse(responseCode = "204", description = "Retorna uma lista vazia"),
+            @ApiResponse(responseCode = "204", description = "Cliente não encontrado")
+    })
+    public ResponseEntity<List<ServicoAtribuido>> getServicoAttribPorCliente(Integer idCliente){
+        Optional<Cliente> clienteOptional = clienteRepository.findById(idCliente);
+        if (clienteOptional.isPresent()){
+            Cliente cliente = clienteOptional.get();
+            List<ServicoAtribuido> servicosAttr = servicoAtribuidoRepository.buscaServicosAttrPorCliente(cliente);
+            if (!servicosAttr.isEmpty()){
+                return ResponseEntity.status(200).body(servicosAttr);
+            }
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(404).build();
+    }
+
+    @GetMapping("/cliente/{idCliente}/ativos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Retorna uma lista de serviços atribuídos"),
+            @ApiResponse(responseCode = "204", description = "Retorna uma lista vazia"),
+            @ApiResponse(responseCode = "204", description = "Cliente não encontrado")
+    })
+    public ResponseEntity<List<ServicoAtribuido>> getServicoAttribPorClienteAtivos(Integer idCliente){
+        Optional<Cliente> clienteOptional = clienteRepository.findById(idCliente);
+        if (clienteOptional.isPresent()){
+            Cliente cliente = clienteOptional.get();
+            List<ServicoAtribuido> servicosAttr = servicoAtribuidoRepository.buscaServicosAttrPorClienteAtivo(cliente);
+            if (!servicosAttr.isEmpty()){
+                return ResponseEntity.status(200).body(servicosAttr);
+            }
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(404).build();
+    }
+
     @PostMapping("/{idUser}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Serviço atribuído cadastrado com sucesso"),
