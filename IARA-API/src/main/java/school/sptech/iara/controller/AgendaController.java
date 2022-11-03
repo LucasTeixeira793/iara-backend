@@ -163,7 +163,9 @@ public class AgendaController {
             for (LocalDate i = hoje; i.isBefore(fimDaInsercao); i = i.plusDays(1)){
                 for (int j = 0; j < req.getDiasDaSemana().length; j++) {
                     if (i.getDayOfWeek().equals(req.getDiasDaSemana()[j])){
-                        if (agendamentoRepository.findAllByAgendaAndData(agenda,i).isEmpty()){
+                        var a = agendamentoRepository.findAllByAgendaAndData(agenda,i);
+                        System.out.println(a);
+                        if (a.isEmpty()){
                             Agendamento horaInicioTrabalho = new Agendamento("Horario Fora do trabalho","", i,
                                     LocalTime.of(0,0), req.getHoraInicioTrabalho(),agenda); // tempo fora da meia noite até o horário de inicio
                             agendamentoRepository.save(horaInicioTrabalho);

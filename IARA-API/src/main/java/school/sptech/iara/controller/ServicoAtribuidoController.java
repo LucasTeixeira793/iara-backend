@@ -104,7 +104,8 @@ public class ServicoAtribuidoController {
             Servico servico = servicoOptional.get();
             Cliente cliente = clienteOptional.get();
             ServicoAtribuido servicoAtribuido;
-            Optional<Prestador> prestadorOptional = prestadorRepository.findById(servico.getPrestador());
+            Integer idPrestador = servico.getPrestador();
+            Optional<Prestador> prestadorOptional = prestadorRepository.findById(idPrestador);
             if (prestadorOptional.isPresent()){
                 Prestador prestador = prestadorOptional.get();
                 Optional<Agenda> agendaOptional = agendaRepository.findByPrestador_Id(prestador.getId());
@@ -124,9 +125,13 @@ public class ServicoAtribuidoController {
                     if (agendamentos.isEmpty())
                         return ResponseEntity.status(400).build();
                     for (Agendamento ag:agendamentos) {
-                        if (agendamento.getHoraInicio().isAfter(ag.getHoraInicio()) && agendamento.getHoraInicio().isBefore(ag.getHoraFim()) ||
-                                agendamento.getHoraFim().isAfter(ag.getHoraInicio()) && agendamento.getHoraFim().isBefore(ag.getHoraFim()) ||
-                                agendamento.getHoraInicio().equals(ag.getHoraInicio()) && agendamento.getHoraFim().equals(ag.getHoraFim())
+                        if (agendamento.getHoraInicio().isAfter(ag.getHoraInicio()) &&
+                                agendamento.getHoraInicio().isBefore(ag.getHoraFim()) ||
+                                agendamento.getHoraFim().isAfter(ag.getHoraInicio()) &&
+                                agendamento.getHoraFim().isBefore(ag.getHoraFim()) ||
+                                agendamento.getHoraInicio().equals(ag.getHoraInicio()) &&
+                                agendamento.getHoraFim().equals(ag.getHoraFim()
+                            )
                         ){
                             return ResponseEntity.status(400).build();
                         }

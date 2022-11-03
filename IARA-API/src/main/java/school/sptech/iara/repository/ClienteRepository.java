@@ -27,6 +27,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
     @Query("SELECT a.foto FROM Cliente a WHERE a.id = ?1")
     byte[] getFoto(Integer idCliente);
 
+    Optional<Cliente> findById(Integer id);
     Boolean existsByTelefone(String telefone);
 
     Boolean existsByEnderecosContainsAndId(Endereco endereco,Integer idPrestador);
