@@ -1,2 +1,3 @@
 *.idea
 *.vscode
+IARA-API\src\main\resources\application.properties
