@@ -145,7 +145,7 @@ public class AgendaController {
         }
         return ResponseEntity.status(400).build();
     }
-
+    @PostMapping ("/intervalos")
     public ResponseEntity<Void> postIntervalos(@RequestBody AgendamentoIntervalosRequest req){
         LocalDate hoje = LocalDate.now();
         // LocalDate fimDaInsercao = LocalDate.of(hoje.getYear(), hoje.getMonth().plus(2), 1);

@@ -92,6 +92,16 @@ INSERT INTO Servico (Ativo, Descricao, Duracao_Estimada, Tipo, Valor, Prestador)
     (true,'Esmaltação Artistica','1:45','Manicure',200,2),
     (true,'Aparação na barba','00:30','Barba',35,2);
 
+-- Categoria
+INSERT INTO Categoria (id, categoria) VALUES
+    (1, 'Corte de Cabelo'),
+    (2, 'Hidratação'),
+    (3, 'Maquiagem'),
+    (4, 'Manicure'),
+    (5, 'Design de Sobrancelhas'),
+    (6, 'Massagem'),
+    (7, 'Pedicure');
+
 -- Serviços atribuidos
 INSERT INTO Servico_Atribuido (Cliente_Id, Servico_Id, Avaliacao, Data_Hora_Fim, Status, Observacoes, Finalizado) VALUES
     (1,7,-1.0,null,'Agendado',null,false),
