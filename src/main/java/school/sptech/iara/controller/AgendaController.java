@@ -146,15 +146,10 @@ public class AgendaController {
         return ResponseEntity.status(400).build();
     }
 
-    @PostMapping("/intervalos")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Intervalos Cadastrados até o final do proximo mes"),
-            @ApiResponse(responseCode = "207", description = "Parte dos intervalos foram inseridos"),
-            @ApiResponse(responseCode = "400", description = "Intervalos já cadastrados ou prestador inxistente")
-    })
     public ResponseEntity<Void> postIntervalos(@RequestBody AgendamentoIntervalosRequest req){
         LocalDate hoje = LocalDate.now();
-        LocalDate fimDaInsercao = LocalDate.of(hoje.getYear(), hoje.getMonth().plus(2), 1);
+        // LocalDate fimDaInsercao = LocalDate.of(hoje.getYear(), hoje.getMonth().plus(2), 1);
+        LocalDate fimDaInsercao = hoje.plusMonths(2);
         Optional<Agenda> agendaOptional = agendaRepository.findByPrestador_Id(req.getIdPrestador());
         if (agendaOptional.isPresent()){
             Agenda agenda = agendaOptional.get();
@@ -175,7 +170,7 @@ public class AgendaController {
                                 agendamentoRepository.save(horaInicioPausa);
                             }
                             Agendamento horaFimTrabalho = new Agendamento("Horario Fora do trabalho","", i,
-                                     req.getHoraFimTrabalho(), LocalTime.of(23,59),agenda); // tempo fora do horario de finalização até as 23:59
+                                    req.getHoraFimTrabalho(), LocalTime.of(23,59),agenda); // tempo fora do horario de finalização até as 23:59
                             agendamentoRepository.save(horaFimTrabalho);
                             contadorEntradas++;
                             break;
