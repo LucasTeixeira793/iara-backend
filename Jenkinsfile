@@ -2,8 +2,10 @@ pipeline {
     agent any
     stages {
         stage('Git Clone') {
-            echo 'Cloning..'
-            git url: 'https://github.com/LucasTeixeira793/iara-backend.git'
+	    steps{
+		echo 'Cloning..'
+                git url: 'https://github.com/LucasTeixeira793/iara-backend.git'
+	    }
         }
         stage('Build') {
             steps {
