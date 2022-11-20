@@ -51,9 +51,10 @@ public class AgendaController {
             for (Agendamento a : agendamentos) {
                 if (Objects.nonNull(a.getServicoAtribuido())) {
                     agendamentosValidos.add(a);
-                    return ResponseEntity.status(200).body(agendamentosValidos);
                 }
             }
+            if (!agendamentosValidos.isEmpty())
+                return ResponseEntity.status(200).body(agendamentosValidos);
             return ResponseEntity.status(204).build();
         }
         return ResponseEntity.status(404).build();
@@ -80,25 +81,29 @@ public class AgendaController {
     }
 
 
-    @GetMapping("/disponiveis")
+    @GetMapping("/disponiveis/{idPrestador}/{servicoId}/{dia}/{mes}/{ano}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Horários disponíveis retornados com sucesso"),
             @ApiResponse(responseCode = "400", description = "Parâmetros de digitação inválidos"),
             @ApiResponse(responseCode = "404", description = "Prestador ou serviço não encontrados")
     })
-    public ResponseEntity<HorariosDisponiveisResponse> getHorariosDisponiveis(@RequestBody @Valid HorariosDisponiveisRequest req){
-        if (req.getData().isAfter(LocalDate.now())){
-            Optional<Servico> servicoOptional = servicoRepository.findById(req.getservicoId());
-            Optional<Prestador> prestadorOptional = prestadorRepository.findById(req.getIdPrestador());
+    public ResponseEntity<HorariosDisponiveisResponse> getHorariosDisponiveis(@PathVariable Integer idPrestador,
+                                                                              @PathVariable Integer servicoId,
+                                                                              @PathVariable Integer dia,
+                                                                              @PathVariable Integer mes,
+                                                                              @PathVariable Integer ano){
+        LocalDate data = LocalDate.of(ano,mes,dia);
+        if (data.isAfter(LocalDate.now())){
+            Optional<Servico> servicoOptional = servicoRepository.findById(servicoId);
+            Optional<Prestador> prestadorOptional = prestadorRepository.findById(idPrestador);
             System.out.println();
             if (prestadorOptional.isPresent() && servicoOptional.isPresent()){
                 Prestador prestador = prestadorOptional.get();
                 Servico servico = servicoOptional.get();
                 Optional<Agenda> agendaOptional = agendaRepository.findByPrestador_Id(prestador.getId());
-                if (servico.getPrestador().equals(prestador) && agendaOptional.isPresent()){
+                if (servico.getPrestador().equals(prestador.getId()) && agendaOptional.isPresent()){
                     Agenda agenda = agendaOptional.get();
-                    List<Agendamento> agendamentos = agendamentoRepository.findAllByAgendaAndDataOrderByHoraInicio
-                                                                            (agenda, req.getData());
+                    List<Agendamento> agendamentos = agendamentoRepository.findAllByAgendaAndDataOrderByHoraInicio(agenda, data);
                     List<HorariosResponse> horariosResponses = new ArrayList<>();
                     for (int i = 0; i < agendamentos.size(); i++) {
                         if (i + 1 < agendamentos.size() &&
@@ -113,7 +118,7 @@ public class AgendaController {
                             }
                         }
                     }
-                    HorariosDisponiveisResponse hr = new HorariosDisponiveisResponse(req.getData(), horariosResponses);
+                    HorariosDisponiveisResponse hr = new HorariosDisponiveisResponse(data, horariosResponses);
                     return ResponseEntity.status(200).body(hr);
                 }
             }

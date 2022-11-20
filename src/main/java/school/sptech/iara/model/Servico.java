@@ -30,7 +30,7 @@ public class Servico {
 //    @OneToMany
 //    private List<ServicoAtribuido> servicoAtribuidos;
 
-
+    @NotNull
     private Integer prestador;
 
 //    Constructor
@@ -41,7 +41,6 @@ public class Servico {
         ativo = true;
         this.prestador = prestador.getId();
         this.duracaoEstimada = duracaoEstimada;
-//        servicoAtribuidos = new ArrayList<>();
     }
     public Servico(double valor, String descricao, String tipo, LocalTime duracaoEstimada) {
         this.valor = valor;
@@ -84,32 +83,19 @@ public class Servico {
 
     //Se servicoAtribuido não existir na lista, adiciona
     public void addServicoAtribuido(ServicoAtribuido servicoAtribuido){
-//        for (ServicoAtribuido serv: servicoAtribuidos) {
-//            if (serv.equals(servicoAtribuido)){
-//                return;
-//            }
-//        }
-//        servicoAtribuidos.add(servicoAtribuido);
+
     }
 
     // Deleta o registro de ServicoAtribuido da lista somente se ele não estiver finalizado ainda
     public void cancelarServicoAtribuido(@NotNull ServicoAtribuido servico){
         if (!servico.isFinalizado()){
-//            for (ServicoAtribuido serv: servicoAtribuidos) {
-//                if (servico.equals(serv)){
-//                    servicoAtribuidos.remove(serv);
-//                }
-//            }
+
         }
     }
 
     public void desativarServico(){
         boolean existeServicosAtribuidosNaoFinalizados = false;
-//        for (ServicoAtribuido servAttr: servicoAtribuidos) {
-//            if (!servAttr.isFinalizado()){
-//                existeServicosAtribuidosNaoFinalizados = true;
-//            }
-//        }
+
         if (!existeServicosAtribuidosNaoFinalizados){
             setAtivo(false);
         }

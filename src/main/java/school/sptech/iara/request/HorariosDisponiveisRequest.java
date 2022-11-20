@@ -8,11 +8,11 @@ import school.sptech.iara.model.ServicoAtribuido;
 import java.time.LocalDate;
 
 public class HorariosDisponiveisRequest {
-    @NotNull
+
     private Integer idPrestador;
-    @NotNull
+
     private LocalDate data;
-    @NotNull
+
     private Integer servicoId;
 
     public Integer getIdPrestador() {
@@ -28,11 +28,11 @@ public class HorariosDisponiveisRequest {
         this.data = data;
     }
 
-    public Integer getservicoId() {
+    public Integer getServicoId() {
         return servicoId;
     }
 
-    public void setservicoId(Integer agendamentoDesejadoId) {
+    public void setServicoId(Integer agendamentoDesejadoId) {
         this.servicoId = agendamentoDesejadoId;
     }
 }
