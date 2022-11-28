@@ -11,7 +11,6 @@ import school.sptech.iara.view.*;
 import school.sptech.iara.view.ViewCtDiaMaisAtendimento;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -47,6 +46,10 @@ public class Views {
     private ViewCtUsuariosSolicitaramAtendimentoRepository viewCtUsuariosSolicitaramAtendimentoRepository;
     @Autowired
     private ViewCtDemandaServicos30DiasRepository viewCtDemandaServicos30DiasRepository;
+    @Autowired
+    private ViewGraficoProcura30DiasPrestadorRepository viewGraficoProcura30DiasPrestadorRepository;
+    @Autowired
+    private ViewGraficoProcura30DiasRepository viewGraficoProcura30DiasRepository;
 
 
     @GetMapping("/agendamento/contagem/7dias")
@@ -214,4 +217,40 @@ public class Views {
         }
         return ResponseEntity.status(204).build();
     }
+
+    @GetMapping("/grafico/procura/30dias/prestador")
+    public ResponseEntity<List<ViewGraficoProcura30DiasPrestador>> getGraficoProcuraPrestador30Dias(Optional<Integer> prestadorId,
+                                                                                           Optional<String> servico){
+        List<ViewGraficoProcura30DiasPrestador> contagemAgendamentos;
+        if (servico.isPresent() && prestadorId.isPresent()){
+            contagemAgendamentos = viewGraficoProcura30DiasPrestadorRepository.findAllByTipoAndPrestador(servico.get(), prestadorId.get());
+        }else if(servico.isPresent()){
+            contagemAgendamentos = viewGraficoProcura30DiasPrestadorRepository.findAllByTipo(servico.get());
+        }else if(prestadorId.isPresent()){
+            contagemAgendamentos = viewGraficoProcura30DiasPrestadorRepository.findAllByPrestador(prestadorId.get());
+        }else{
+            contagemAgendamentos = viewGraficoProcura30DiasPrestadorRepository.findAll();
+        }
+
+        if (!contagemAgendamentos.isEmpty()){
+            return ResponseEntity.status(200).body(contagemAgendamentos);
+        }
+        return ResponseEntity.status(204).build();
+    }
+
+    @GetMapping("/grafico/procura/30dias")
+    public ResponseEntity<List<ViewGraficoProcura30Dias>> getGraficoProcura30Dias(Optional<String> servico){
+        List<ViewGraficoProcura30Dias> contagemAgendamentos;
+        if(servico.isPresent()){
+            contagemAgendamentos = viewGraficoProcura30DiasRepository.findAllByTipo(servico.get());
+        }else{
+            contagemAgendamentos = viewGraficoProcura30DiasRepository.findAll();
+        }
+
+        if (!contagemAgendamentos.isEmpty()){
+            return ResponseEntity.status(200).body(contagemAgendamentos);
+        }
+        return ResponseEntity.status(204).build();
+    }
+
 }
