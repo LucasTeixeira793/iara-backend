@@ -10,26 +10,23 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.LocalDate;
 
 @Entity
 @Data
 @NoArgsConstructor
 @Immutable
 @AllArgsConstructor
-@Subselect("SELECT uuid() AS id, hs.* FROM vw_ct_dia_mais_atendimento hs")
-@Table(name = "vw_ct_dia_mais_atendimento")
-public class ViewCtDiaMaisAtendimento {
+@Subselect("SELECT uuid() AS id, hs.* FROM vw_ct_dia_semana hs")
+@Table(name = "vw_ct_dia_semana")
+public class ViewCtDiaSemana {
+
     @Id
     private String id;
 
-    @Column(name="prestador")
-    private Integer prestador;
-
-    @Column(name="atendimentos")
-    private Integer atendimentos;
-
     @Column(name="dia")
     private String dia;
+
+    @Column(name="qtd_atendimentos")
+    private Integer qtd_atendimentos;
 
 }

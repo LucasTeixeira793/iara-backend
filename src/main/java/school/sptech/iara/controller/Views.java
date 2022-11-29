@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import school.sptech.iara.model.Prestador;
 import school.sptech.iara.repository.*;
 import school.sptech.iara.view.*;
 import school.sptech.iara.view.ViewCtDiaMaisAtendimento;
@@ -50,6 +51,10 @@ public class Views {
     private ViewGraficoProcura30DiasPrestadorRepository viewGraficoProcura30DiasPrestadorRepository;
     @Autowired
     private ViewGraficoProcura30DiasRepository viewGraficoProcura30DiasRepository;
+    @Autowired
+    private ViewCtDiaSemanaRepository viewCtDiaSemanaRepository;
+    @Autowired
+    private ViewCtDiaSemanaPrestadorRepository viewCtDiaSemanaPrestadorRepository;
 
 
     @GetMapping("/agendamento/contagem/7dias")
@@ -172,12 +177,16 @@ public class Views {
     }
 
     @GetMapping("/agendamento/dia/maior")
-    public ResponseEntity<ViewCtDiaMaisAtendimento> getDiaComMaisAtendimentos(){
+    public ResponseEntity<List<ViewCtDiaMaisAtendimento>> getDiaComMaisAtendimentos(Optional<Integer> idPrestador){
         List<ViewCtDiaMaisAtendimento> contagemAgendamentos;
-        contagemAgendamentos = viewCtDiaMaisAtendimentoRepository.findAll();
-
+        if (idPrestador.isPresent()) {
+            contagemAgendamentos = viewCtDiaMaisAtendimentoRepository.findAllByPrestador(idPrestador.get());
+        }
+        else {
+            contagemAgendamentos = viewCtDiaMaisAtendimentoRepository.findAll();
+        }
         if (!contagemAgendamentos.isEmpty()){
-            return ResponseEntity.status(200).body(contagemAgendamentos.get(0));
+            return ResponseEntity.status(200).body(contagemAgendamentos);
         }
         return ResponseEntity.status(204).build();
     }
@@ -247,6 +256,29 @@ public class Views {
             contagemAgendamentos = viewGraficoProcura30DiasRepository.findAll();
         }
 
+        if (!contagemAgendamentos.isEmpty()){
+            return ResponseEntity.status(200).body(contagemAgendamentos);
+        }
+        return ResponseEntity.status(204).build();
+    }
+
+    @GetMapping("/agendamento/dia-semana")
+    public ResponseEntity<List<ViewCtDiaSemana>> getContagemServicoDiaSemana(){
+        List<ViewCtDiaSemana> contagemAgendamentos = viewCtDiaSemanaRepository.findAll();
+        if (!contagemAgendamentos.isEmpty()){
+            return ResponseEntity.status(200).body(contagemAgendamentos);
+        }
+        return ResponseEntity.status(204).build();
+    }
+
+    @GetMapping("/agendamento/dia-semana/prestador")
+    public ResponseEntity<List<ViewCtDiaSemanaPrestador>> getContagemServicoDiaSemanaPrestador(Optional<Integer> idPrestador){
+        List<ViewCtDiaSemanaPrestador> contagemAgendamentos;
+        if (idPrestador.isPresent()){
+            contagemAgendamentos = viewCtDiaSemanaPrestadorRepository.findAllByPrestador(idPrestador.get());
+        }else{
+            contagemAgendamentos = viewCtDiaSemanaPrestadorRepository.findAll();
+        }
         if (!contagemAgendamentos.isEmpty()){
             return ResponseEntity.status(200).body(contagemAgendamentos);
         }
