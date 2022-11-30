@@ -1,5 +1,6 @@
 package school.sptech.iara.view;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ import javax.persistence.Table;
 @Table(name = "vw_ct_dia_semana_prestador")
 public class ViewCtDiaSemanaPrestador {
 
+    @JsonIgnore
     @Id
     private String id;
 

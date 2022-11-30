@@ -1,5 +1,6 @@
 package school.sptech.iara.view;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ import javax.persistence.Table;
 @Subselect("SELECT uuid() AS id, hs.* FROM vw_ct_mes_anterior hs")
 @Table(name = "vw_ct_mes_anterior")
 public class ViewCtMesAnterior {
+    @JsonIgnore
     @Id
     private String id;
 

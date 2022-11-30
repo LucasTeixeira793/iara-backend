@@ -1,5 +1,6 @@
 package school.sptech.iara.view;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ import java.io.Serializable;
 @Subselect("SELECT uuid() AS id, hs.* FROM vw_ct_ultimos_30_dias hs")
 @Table(name = "vw_ct_ultimos_30_dias")
 public class ViewCtUltimos30Dias implements Serializable {
-
+    @JsonIgnore
     @Id
     private String id;
 

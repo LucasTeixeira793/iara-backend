@@ -11,6 +11,7 @@ import school.sptech.iara.repository.*;
 import school.sptech.iara.view.*;
 import school.sptech.iara.view.ViewCtDiaMaisAtendimento;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,6 +56,10 @@ public class Views {
     private ViewCtDiaSemanaRepository viewCtDiaSemanaRepository;
     @Autowired
     private ViewCtDiaSemanaPrestadorRepository viewCtDiaSemanaPrestadorRepository;
+    @Autowired
+    ViewCtProcuraSemanaAtualPrestadorRepository viewCtProcuraSemanaAtualPrestadorRepository;
+    @Autowired
+    ViewCtProcuraSemanaAtualRepository viewCtProcuraSemanaAtualRepository;
 
 
     @GetMapping("/agendamento/contagem/7dias")
@@ -279,6 +284,30 @@ public class Views {
         }else{
             contagemAgendamentos = viewCtDiaSemanaPrestadorRepository.findAll();
         }
+        if (!contagemAgendamentos.isEmpty()){
+            return ResponseEntity.status(200).body(contagemAgendamentos);
+        }
+        return ResponseEntity.status(204).build();
+    }
+
+    @GetMapping("/grafico/contagem/semana-atual/prestador")
+    public ResponseEntity<List<ViewCtProcuraSemanaAtualPrestador>> getContagemServicoSemanaPrestadorAtual(Optional<Integer> idPrestador){
+        List<ViewCtProcuraSemanaAtualPrestador> contagemAgendamentos;
+        if (idPrestador.isPresent()){
+            contagemAgendamentos = viewCtProcuraSemanaAtualPrestadorRepository.findAllByPrestadorId(idPrestador.get());
+        }else{
+            contagemAgendamentos = viewCtProcuraSemanaAtualPrestadorRepository.findAll();
+        }
+        if (!contagemAgendamentos.isEmpty()){
+            return ResponseEntity.status(200).body(contagemAgendamentos);
+        }
+        return ResponseEntity.status(204).build();
+    }
+
+    @GetMapping("/grafico/contagem/semana-atual")
+    public ResponseEntity<List<ViewCtProcuraSemanaAtual>> getContagemServicoSemanaAtual(){
+        List<ViewCtProcuraSemanaAtual> contagemAgendamentos;
+        contagemAgendamentos = viewCtProcuraSemanaAtualRepository.findAll();
         if (!contagemAgendamentos.isEmpty()){
             return ResponseEntity.status(200).body(contagemAgendamentos);
         }
