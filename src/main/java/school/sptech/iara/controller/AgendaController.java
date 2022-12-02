@@ -291,6 +291,19 @@ public class AgendaController {
         return ResponseEntity.status(400).build();
     }
 
+    @GetMapping("dias-trabalho/{idPrestador}")
+    public ResponseEntity<List<String>> getDiasDeTrabalho(@PathVariable Integer idPrestador){
+        Optional<Agenda> agendaOptional = agendaRepository.findByPrestador_Id(idPrestador);
+        if (agendaOptional.isPresent()){
+            Agenda agenda = agendaOptional.get();
+            List<String> dias = agendamentoRepository.findDiasDisponiveisByPrestador(idPrestador);
+            if (!dias.isEmpty())
+                return ResponseEntity.status(200).body(dias);
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(404).build();
+    }
+
     @DeleteMapping
     @ApiResponses(value = {
             @ApiResponse(responseCode = "202", description = "Agendamento excluido com sucesso"),
