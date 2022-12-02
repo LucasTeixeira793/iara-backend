@@ -2,10 +2,7 @@ package school.sptech.iara.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import school.sptech.iara.model.Prestador;
 import school.sptech.iara.repository.*;
 import school.sptech.iara.view.*;
@@ -60,6 +57,10 @@ public class Views {
     ViewCtProcuraSemanaAtualPrestadorRepository viewCtProcuraSemanaAtualPrestadorRepository;
     @Autowired
     ViewCtProcuraSemanaAtualRepository viewCtProcuraSemanaAtualRepository;
+    @Autowired
+    ViewCtAtendimentosHoraRepository viewCtAtendimentosHoraRepository;
+    @Autowired
+    ViewCtAtendimentosHoraGeralRepository viewCtAtendimentosHoraGeralRepository;
 
 
     @GetMapping("/agendamento/contagem/7dias")
@@ -310,6 +311,44 @@ public class Views {
         contagemAgendamentos = viewCtProcuraSemanaAtualRepository.findAll();
         if (!contagemAgendamentos.isEmpty()){
             return ResponseEntity.status(200).body(contagemAgendamentos);
+        }
+        return ResponseEntity.status(204).build();
+    }
+    @GetMapping("/atendimento/hora/{idPrestador}/maior")
+    public ResponseEntity<ViewCtAtendimentosHora> getContagemAtendimentosHoraMaiorPrestador(@PathVariable Integer idPrestador){
+        List<ViewCtAtendimentosHora> contagemAgendamentos;
+        contagemAgendamentos = viewCtAtendimentosHoraRepository.findAllByPrestadorIdOrderByQtdAtendimentosDesc(idPrestador);
+        if (!contagemAgendamentos.isEmpty()){
+            return ResponseEntity.status(200).body(contagemAgendamentos.get(0));
+        }
+        return ResponseEntity.status(204).build();
+    }
+
+    @GetMapping("/atendimento/hora/{idPrestador}/menor")
+    public ResponseEntity<ViewCtAtendimentosHora> getContagemAtendimentosHoraMenorPrestador(@PathVariable Integer idPrestador){
+        List<ViewCtAtendimentosHora> contagemAgendamentos;
+        contagemAgendamentos = viewCtAtendimentosHoraRepository.findAllByPrestadorIdOrderByQtdAtendimentos(idPrestador);
+        if (!contagemAgendamentos.isEmpty()){
+            return ResponseEntity.status(200).body(contagemAgendamentos.get(0));
+        }
+        return ResponseEntity.status(204).build();
+    }
+
+    @GetMapping("/atendimento/hora/maior")
+    public ResponseEntity<ViewCtAtendimentosHoraGeral> getContagemAtendimentosHoraMaior(){
+        List<ViewCtAtendimentosHoraGeral> contagemAgendamentos;
+        contagemAgendamentos = viewCtAtendimentosHoraGeralRepository.findAllByOrderByQtdAtendimentosDesc();
+        if (!contagemAgendamentos.isEmpty()){
+            return ResponseEntity.status(200).body(contagemAgendamentos.get(0));
+        }
+        return ResponseEntity.status(204).build();
+    }
+    @GetMapping("/atendimento/hora/menor")
+    public ResponseEntity<ViewCtAtendimentosHoraGeral> getContagemAtendimentosHoraMenor(){
+        List<ViewCtAtendimentosHoraGeral> contagemAgendamentos;
+        contagemAgendamentos = viewCtAtendimentosHoraGeralRepository.findAllByOrderByQtdAtendimentos();
+        if (!contagemAgendamentos.isEmpty()){
+            return ResponseEntity.status(200).body(contagemAgendamentos.get(0));
         }
         return ResponseEntity.status(204).build();
     }
