@@ -20,13 +20,13 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Intege
     Integer countAgendamentoByData(LocalDate data);
     Agendamento findByServicoAtribuido_Id(Integer idServicoAttr);
     @Query(value="select (CASE WEEKDAY(ag.data)    \n" +
-            "                       when 0 then 'Segunda-feira'\n" +
-            "                       when 1 then 'Terça-feira'\n" +
-            "                       when 2 then 'Quarta-feira'\n" +
-            "                       when 3 then 'Quinta-feira'\n" +
-            "                       when 4 then 'Sexta-feira'\n" +
-            "                       when 5 then 'Sábado'\n" +
-            "                       when 6 then 'Domingo'                 \n" +
+            "                       when 0 then 'Seg '\n" +
+            "                       when 1 then 'Ter '\n" +
+            "                       when 2 then 'Qua '\n" +
+            "                       when 3 then 'Qui '\n" +
+            "                       when 4 then 'Sex '\n" +
+            "                       when 5 then 'Sáb '\n" +
+            "                       when 6 then 'Dom '                 \n" +
             "                       END) AS dia_semana from agendamento ag \n" +
             "inner join agenda a on ag.agenda_id = a.id\n" +
             "where a.prestador_id =:idPrestador\n" +
