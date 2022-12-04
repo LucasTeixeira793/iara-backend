@@ -26,7 +26,7 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Intege
             "                       when 3 then 'Qui '\n" +
             "                       when 4 then 'Sex '\n" +
             "                       when 5 then 'Sáb '\n" +
-            "                       when 6 then 'Dom '                 \n" +
+            "                       when 6 then 'Dom '\n" +
             "                       END) AS dia_semana from agendamento ag \n" +
             "inner join agenda a on ag.agenda_id = a.id\n" +
             "where a.prestador_id =:idPrestador\n" +

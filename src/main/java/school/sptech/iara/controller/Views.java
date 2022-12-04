@@ -62,6 +62,8 @@ public class Views {
     ViewCtAtendimentosHoraRepository viewCtAtendimentosHoraRepository;
     @Autowired
     ViewCtAtendimentosHoraGeralRepository viewCtAtendimentosHoraGeralRepository;
+    @Autowired
+    ViewCtAtendimentosServicoRepository viewCtAtendimentosServicoRepository;
 
 
     @GetMapping("/agendamento/contagem/7dias")
@@ -365,6 +367,47 @@ public class Views {
         contagemAgendamentos = viewCtAtendimentosHoraGeralRepository.findAllByOrderByQtdAtendimentos();
         if (!contagemAgendamentos.isEmpty()){
             return ResponseEntity.status(200).body(contagemAgendamentos.get(0));
+        }
+        return ResponseEntity.status(204).build();
+    }
+
+    @GetMapping("/servico/contagem/maior/30dias")
+    public ResponseEntity<ViewCtServicos> getContagemMaiorAttServicos(Optional<Integer> prestadorId){
+        List<ViewCtServicos> contagemAgendamentos;
+        if (prestadorId.isPresent()){
+            contagemAgendamentos = viewCtAtendimentosServicoRepository.buscaTudoUltimoMesPrestador(prestadorId.get());
+        }else{
+            contagemAgendamentos = viewCtAtendimentosServicoRepository.buscaTudoUltimoMes();
+        }
+        if (!contagemAgendamentos.isEmpty()){
+            return ResponseEntity.status(200).body(contagemAgendamentos.get(0));
+        }
+        return ResponseEntity.status(204).build();
+    }
+    @GetMapping("/servico/contagem/menor/30dias")
+    public ResponseEntity<ViewCtServicos> getContagemMenorAttServicos(Optional<Integer> prestadorId){
+        List<ViewCtServicos> contagemAgendamentos;
+        if (prestadorId.isPresent()){
+            contagemAgendamentos = viewCtAtendimentosServicoRepository.buscaTudoUltimoMesPrestador(prestadorId.get());
+        }else{
+            contagemAgendamentos = viewCtAtendimentosServicoRepository.buscaTudoUltimoMes();
+        }
+        if (!contagemAgendamentos.isEmpty()){
+            return ResponseEntity.status(200).body(contagemAgendamentos.get(contagemAgendamentos.size() - 1));
+        }
+        return ResponseEntity.status(204).build();
+    }
+
+    @GetMapping("/servico/contagem/30dias")
+    public ResponseEntity<List<ViewCtServicos>> getContagemAttServicos(Optional<Integer> prestadorId){
+        List<ViewCtServicos> contagemAgendamentos;
+        if (prestadorId.isPresent()){
+            contagemAgendamentos = viewCtAtendimentosServicoRepository.buscaTudoUltimoMesPrestador(prestadorId.get());
+        }else{
+            contagemAgendamentos = viewCtAtendimentosServicoRepository.buscaTudoUltimoMes();
+        }
+        if (!contagemAgendamentos.isEmpty()){
+            return ResponseEntity.status(200).body(contagemAgendamentos);
         }
         return ResponseEntity.status(204).build();
     }
