@@ -40,7 +40,7 @@ public interface ViewCtAtendimentosServicoRepository extends PagingAndSortingRep
             "\tand datediff(now(), data) <= 30\n" +
             "\tand datediff(now(), data) >= 0\n" +
             "    and s.prestador =:idPrestador\n" +
-            "\tgroup by s.prestador_id, s.tipo\n" +
+            "\tgroup by s.prestador, s.tipo\n" +
             "\torder by agendamentos desc", nativeQuery = true)
     List<ViewCtServicos> buscaTudoUltimoMesPrestador(@Param("idPrestador") Integer idPrestador);
 
