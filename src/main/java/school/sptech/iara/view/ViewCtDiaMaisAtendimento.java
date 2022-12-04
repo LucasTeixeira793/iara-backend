@@ -34,4 +34,9 @@ public class ViewCtDiaMaisAtendimento {
     @Column(name="dia")
     private String dia;
 
+    public ViewCtDiaMaisAtendimento(Integer prestador, Integer atendimentos, String dia) {
+        this.prestador = prestador;
+        this.atendimentos = atendimentos;
+        this.dia = dia;
+    }
 }

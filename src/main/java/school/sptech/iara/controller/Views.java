@@ -8,6 +8,7 @@ import school.sptech.iara.repository.*;
 import school.sptech.iara.view.*;
 import school.sptech.iara.view.ViewCtDiaMaisAtendimento;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -183,16 +184,31 @@ public class Views {
     }
 
     @GetMapping("/agendamento/dia/maior")
-    public ResponseEntity<List<ViewCtDiaMaisAtendimento>> getDiaComMaisAtendimentos(Optional<Integer> idPrestador){
+    public ResponseEntity<ViewCtDiaMaisAtendimento> getDiaComMaisAtendimentos(Optional<Integer> idPrestador){
         List<ViewCtDiaMaisAtendimento> contagemAgendamentos;
         if (idPrestador.isPresent()) {
             contagemAgendamentos = viewCtDiaMaisAtendimentoRepository.findAllByPrestador(idPrestador.get());
         }
         else {
-            contagemAgendamentos = viewCtDiaMaisAtendimentoRepository.findAll();
+            contagemAgendamentos = viewCtDiaMaisAtendimentoRepository.buscaMaiorQtdAgendamentos();
         }
         if (!contagemAgendamentos.isEmpty()){
-            return ResponseEntity.status(200).body(contagemAgendamentos);
+            return ResponseEntity.status(200).body(contagemAgendamentos.get(0));
+        }
+        return ResponseEntity.status(204).build();
+    }
+
+    @GetMapping("/agendamento/dia/menor")
+    public ResponseEntity<ViewCtDiaMaisAtendimento> getDiaComMenosAtendimentos(Optional<Integer> idPrestador){
+        List<ViewCtDiaMaisAtendimento> contagemAgendamentos;
+        if (idPrestador.isPresent()) {
+            contagemAgendamentos = viewCtDiaMaisAtendimentoRepository.findAllByPrestadorOrderByAtendimentosAsc(idPrestador.get());
+        }
+        else {
+            contagemAgendamentos = viewCtDiaMaisAtendimentoRepository.buscaMenorQtdAgendamentos();
+        }
+        if (!contagemAgendamentos.isEmpty()){
+            return ResponseEntity.status(200).body(contagemAgendamentos.get(0));
         }
         return ResponseEntity.status(204).build();
     }
